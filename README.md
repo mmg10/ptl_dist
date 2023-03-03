@@ -14,21 +14,22 @@ MASTER_ADDR={IP of RANK 0} MASTER_PORT=29500 NODE_RANK=0 python main.py
 MASTER_ADDR={IP of RANK 0} MASTER_PORT=29500 NODE_RANK=1 python main.py
 ```
 
-### Single-Node, Multiple GPUs - check again
-[Code](./02_ddp_mnist_1n2g) 
+### Single-Node, Multiple GPUs
+[Code](./02_ddp_mnist_1n2g)   
 Command:
 ```bash
 pip install torch_tb_profiler if profiling needed; else disable it
 MASTER_ADDR=localhost MASTER_PORT=29500 WORLD_SIZE=2 NODE_RANK=0 python main.py
 tensorboard --logdir=./tensorboard/ --host=0.0.0.0 # to view tensorboard
 ```
+
 ## Distributed Model Parallel
 * Data used: Intel Image Classification from 
 ### Strategy: FSDP
 
 #### Multi-Node, Single GPUs
 [Code](./03_fsdp_mnist_2n1g) 
-- ViT Model is used
+- ViT Model is used  
 Caveats:
 - Number of devices = 2 (1 per node; 2 in total). This is in contrast with DDP training.
 - PTL checkpointing doesn't work. The weights are not stored.
@@ -45,4 +46,10 @@ python -m torch.distributed.run \
     --master_port $MASTER_PORT \
     --node_rank $NODE_RANK \
     main.py
+```
+
+#### Single Node, Multiple GPUs
+[Code](./04_fsdp_mnist_1n2g)   
+```
+MASTER_ADDR=localhost MASTER_PORT=29500 WORLD_SIZE=1 NODE_RANK=0 python main.py
 ```
